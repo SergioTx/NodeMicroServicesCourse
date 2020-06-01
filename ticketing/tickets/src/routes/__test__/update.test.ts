@@ -17,7 +17,7 @@ it('returns a 401 if the user is not authenticated', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
 
   await request(app)
-    .put(`/api/ticets/${id}`)
+    .put(`/api/tickets/${id}`)
     .send({ title: 'Test', price: 20 })
     .expect(401);
 });

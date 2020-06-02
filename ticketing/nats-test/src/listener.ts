@@ -12,6 +12,11 @@ const stan = nats.connect('ticketing', randomId, {
 stan.on('connect', () => {
   console.log('Listener connected to NATS');
 
+  stan.on('close', () => {
+    console.log('NATS connection closed!');
+    process.exit();
+  });
+
   const options = stan.subscriptionOptions().setManualAckMode(true);
   const subscription = stan.subscribe(
     'ticket:created',
@@ -28,3 +33,6 @@ stan.on('connect', () => {
     msg.ack(); // acknowledge message received
   });
 });
+
+process.on('SIGINT', () => stan.close());
+process.on('SIGTERM', () => stan.close());

@@ -5,9 +5,10 @@ import {
   requireAuth,
   validateRequest,
 } from '@stxtickets/common';
-import { body } from 'express-validator';
-
 import { Ticket } from '../models/ticket';
+import { natsWrapper } from '../nats-wrapper';
+import { body } from 'express-validator';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 
 const router = express.Router();
 
@@ -36,6 +37,14 @@ router.put(
       price: req.body.price,
     });
     await ticket.save();
+
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      // need to take it from ticket as it can internally change
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.send(ticket);
   }

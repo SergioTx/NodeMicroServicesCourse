@@ -1,3 +1,32 @@
 import { Ticket } from '../ticket';
 
-it('implements optimistic concurrency control', async () => {});
+it('implements optimistic concurrency control', async (done) => {
+  // creates an instance of a ticket
+  const ticket = Ticket.build({
+    title: 'TestTitle',
+    price: 5,
+    userId: '123',
+  });
+
+  // save the ticket to the database
+  await ticket.save();
+
+  // fetch the ticket twice
+  const firstInstance = await Ticket.findById(ticket.id);
+  const secondInstance = await Ticket.findById(ticket.id);
+
+  // make two separate changes to tthe ticket we fetched
+  firstInstance!.set({ price: 10 });
+  secondInstance!.set({ price: 20 });
+
+  // save the first fetched ticket
+  await firstInstance!.save();
+
+  // save the second fetched ticket and expect an error
+  try {
+    await secondInstance!.save();
+  } catch (err) {
+    return done();
+  }
+  throw new Error('Should not reach this point');
+});

@@ -26,6 +26,7 @@ router.post(
     new TicketCreatedPublisher(natsWrapper.client).publish({
       // need to take it from ticket as it can internally change
       id: ticket.id,
+      version: ticket.version,
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,

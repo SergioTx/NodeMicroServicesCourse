@@ -7,14 +7,14 @@ export { OrderStatus };
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
-  expieresAt: Date;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
-  expieresAt: Date;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 

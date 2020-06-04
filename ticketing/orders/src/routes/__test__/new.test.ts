@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
 
 it('return an error if the ticket does not exist', async () => {
   const ticketId = mongoose.Types.ObjectId();
@@ -12,6 +14,26 @@ it('return an error if the ticket does not exist', async () => {
     .expect(404);
 });
 
-it('return an error if the ticket is already reserved', async () => {});
+it('return an error if the ticket is already reserved', async () => {
+  const ticket = Ticket.build({
+    title: 'TestTitle',
+    price: 20,
+  });
+  await ticket.save();
+
+  const order = Order.build({
+    ticket,
+    userId: 'sdjflasdfj',
+    status: OrderStatus.Created,
+    expieresAt: new Date(),
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(400);
+});
 
 it('reserves the ticket', async () => {});

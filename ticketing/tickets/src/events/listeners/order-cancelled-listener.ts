@@ -4,7 +4,7 @@ import { queueGroupName } from './queue-group-name';
 import { Ticket } from '../../models/ticket';
 import { TicketUpdatedPublisher } from '../../events/publishers/ticket-updated-publisher';
 
-export class OrderCreatedListener extends Listener<OrderCancelledEvent> {
+export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
   readonly subject = Subjects.OrderCancelled;
   queueGroupName = queueGroupName;
 

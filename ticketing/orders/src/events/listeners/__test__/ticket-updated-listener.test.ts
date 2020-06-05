@@ -31,9 +31,25 @@ const setup = async () => {
   };
 
   // return all of this stuff
-  return { listener, data, msg };
+  return { listener, ticket, data, msg };
 };
 
-it('finds, updates and saves a ticket', async () => {});
+it('finds, updates and saves a ticket', async () => {
+  const { listener, ticket, data, msg } = await setup();
 
-it('acknowledges the message', async () => {});
+  await listener.onMessage(data, msg as Message);
+
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket!.title).toEqual(data.title);
+  expect(updatedTicket!.price).toEqual(data.price);
+  expect(updatedTicket!.version).toEqual(data.version);
+});
+
+it('acknowledges the message', async () => {
+  const { listener, data, msg } = await setup();
+
+  await listener.onMessage(data, msg as Message);
+
+  expect(msg.ack).toHaveBeenCalled();
+});

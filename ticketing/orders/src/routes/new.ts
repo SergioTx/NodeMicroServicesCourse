@@ -1,21 +1,22 @@
-import mongoose from 'mongoose';
-import express, { Request, Response } from 'express';
 import {
-  requireAuth,
-  validateRequest,
+  BadRequestError,
   NotFoundError,
   OrderStatus,
-  BadRequestError,
+  requireAuth,
+  validateRequest,
 } from '@stxtickets/common';
-import { body } from 'express-validator';
-import { Ticket } from '../models/ticket';
+import express, { Request, Response } from 'express';
+
 import { Order } from '../models/order';
-import { natsWrapper } from '../nats-wrapper';
 import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { Ticket } from '../models/ticket';
+import { body } from 'express-validator';
+import mongoose from 'mongoose';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
 router.post(
   '/api/orders',

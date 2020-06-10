@@ -9,4 +9,4 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   onMessage(data: OrderCreatedEvent['data'], msg: Message): void {
     throw new Error("Method not implemented.");
   }
-}
+} 

@@ -1,7 +1,7 @@
 import { Listener, OrderCreatedEvent, Subjects } from '@stxtickets/common';
 
 import { Message } from 'node-nats-streaming';
-import { expirationQueue } from '../queues/expiration-queue';
+import { expirationQueue } from '../../queues/expiration-queue';
 import { queueGroupName } from './queue-group-name';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
